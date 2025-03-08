@@ -1,41 +1,22 @@
-function getRandomHexColor() {
-    return `#${Math.floor(Math.random() * 16777215)
-        .toString(16)
-        .padStart(6, 0)}`;
-}
+const loginFormElement = document.querySelector('.login-form');
 
-const controlsElement = document.getElementById('controls');
-const inputElement = controlsElement.querySelector('input');
-const createButtonElement = controlsElement.querySelector('button[data-create]');
-const destroyButtonElement = controlsElement.querySelector('button[data-destroy]');
-const boxesElement = document.getElementById('boxes');
+loginFormElement.addEventListener('submit', event => {
+    event.preventDefault();
 
-createButtonElement.addEventListener('click', () => {
-    const amount = parseInt(inputElement.value, 10);
-    if (amount >= 1 && amount <= 100) {
-        createBoxes(amount);
-        inputElement.value = '';
-    } else {
-        alert('Please enter a number between 1 and 100.');
+    const { email, password } = event.currentTarget.elements;
+    const emailValue = email.value.trim();
+    const passwordValue = password.value.trim();
+
+    if (!emailValue || !passwordValue) {
+        alert('All form fields must be filled in');
+        return;
     }
+
+    const formData = {
+        email: emailValue,
+        password: passwordValue,
+    };
+
+    console.log(formData);
+    loginFormElement.reset();
 });
-
-destroyButtonElement.addEventListener('click', destroyBoxes);
-
-function createBoxes(amount) {
-    const elements = [];
-    for (let i = 0; i < amount; i++) {
-        const div = document.createElement('div');
-        const size = 30 + i * 10;
-        div.style.width = `${size}px`;
-        div.style.height = `${size}px`;
-        div.style.backgroundColor = getRandomHexColor();
-        elements.push(div);
-    }
-    boxesElement.innerHTML = '';
-    boxesElement.append(...elements);
-}
-
-function destroyBoxes() {
-    boxesElement.innerHTML = '';
-}
